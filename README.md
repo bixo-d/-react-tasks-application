@@ -936,4 +936,84 @@ Tailwind es un Framework CSS que ayuda a desarrollar websites modernos. Hay una 
    </div>
    ```
 
-## Despliegue Github Pages
+## Despliegue _Github Pages_
+
+Una vez desarrollada y probada la aplicación, se puede publicar la versión de producción. En este caso, es contenido estático, por lo que se puede publicar en cualquier servicio de despliegue de contenido estático. Aquí se usará _GitHub Pages_.
+
+Se crea el repositorio en GitHub. Al crear el repositorio, GitHub te da las instrucciones de como crear el repositorio desde la línea de comandos y subir el repositorio a GitHub. En el siguiente listado `bixo-d` es el usuario y `react-tasks-application` el nombre del repositorio.
+
+```bash
+$ echo "# react-tasks-application" >> README.md
+$ git init
+$ git add README.md
+$ git commit -m "first commit"
+$ git branch -M main
+$ git remote add origin https://github.com/bixo-d/react-tasks-application.git
+$ git push -u origin main
+```
+
+Para facilitar el despliegue, existe un paquete de `npm` que se llama [`gh-pages`](https://www.npmjs.com/package/gh-pages). Para instalarlo, ejecutar:
+
+```bash
+$ npm install gh-pages --save-dev
+```
+A continuación se añade el comando `deploy` a la sección de `Scripts` de `package.json`:
+
+```json
+"scripts": {
+  ...
+  "deploy": "gh-pages -d dist"
+}
+```
+
+También Vite debe ser configurado para trabajar con _GitHub Pages_. Vite tiene [instrucciones particulares](https://vitejs.dev/guide/static-deploy.html#github-pages) para _GitHub Pages_ y se siguen a continuación.
+
+Se modifica `vite.config.js` para que `base` sea:
+
+```js
+base: '/react-tasks-application/'
+```
+En la carpeta raíz del proyecto, se crea el archivo `deploy.sh` y se le coloca el siguiente contenido:
+
+```bash
+#!/usr/bin/env sh
+
+# abort on errors
+set -e
+
+# build
+npm run build
+
+# navigate into the build output directory
+cd dist
+
+# place .nojekyll to bypass Jekyll processing
+echo > .nojekyll
+
+# if you are deploying to a custom domain
+# echo 'www.example.com' > CNAME
+
+git init
+git checkout -B main
+git add -A
+git commit -m 'deploy'
+
+# if you are deploying to https://<USERNAME>.github.io
+# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
+
+# if you are deploying to https://<USERNAME>.github.io/<REPO>
+git push -f git@github.com:bixo-d/react-tasks-application.git main:gh-pages
+#### LA LÍNEA ANTERIOR SE DESCOMENTÓ Y SE LE COLOCÓ <USERNAME>/<REPO>
+
+cd -
+```
+
+Hechas estas configuraciones, se pueden ejecutar los siguientes comandos para el despliegue del sitio:
+
+```bash
+$ npm run build
+$ npm run deploy
+```
+
+Con esto la aplicación se desplegará en el sitio de GitHub en algunos segundos. En la página de `Settings->Pages` del repositorio se encuentra el enlace a la dirección del sitio web.
+

@@ -957,6 +957,7 @@ Para facilitar el despliegue, existe un paquete de `npm` que se llama [`gh-pages
 ```bash
 $ npm install gh-pages --save-dev
 ```
+
 A continuación se añade el comando `deploy` a la sección de `Scripts` de `package.json`:
 
 ```json
@@ -971,8 +972,9 @@ También Vite debe ser configurado para trabajar con _GitHub Pages_. Vite tiene 
 Se modifica `vite.config.js` para que `base` sea:
 
 ```js
-base: '/react-tasks-application/'
+base: "/react-tasks-application/";
 ```
+
 En la carpeta raíz del proyecto, se crea el archivo `deploy.sh` y se le coloca el siguiente contenido:
 
 ```bash
@@ -1016,4 +1018,3 @@ $ npm run deploy
 ```
 
 Con esto la aplicación se desplegará en el sitio de GitHub en algunos segundos. En la página de `Settings->Pages` del repositorio se encuentra el enlace a la dirección del sitio web.
-
